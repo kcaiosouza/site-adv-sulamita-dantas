@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { BlogCard } from '@/components/BlogCard';
 import { BoxInfo } from '@/components/BoxInfo';
 import Image from 'next/image';
@@ -6,26 +7,41 @@ import { FaShield } from "react-icons/fa6";
 import { IoMdArrowDropleft } from "react-icons/io";
 import { IoMdArrowDropright } from "react-icons/io";
 
-
 export default function Home() {
+  const divRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if(divRef.current) {
+        divRef.current.scrollLeft = window.scrollY;
+      };
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.addEventListener('scroll', handleScroll);
+    }
+  }, []);
+
   return (
     <main>
       <header className='flex flex-col w-full min-h-screen bg-[var(--header-white)] bg-[url("/lines_background.svg")] bg-cover'>
-        <nav>
-          <div>
+        <nav className='flex flex-row w-full px-12'>
+          <div className=''>
             <Image src="/logo_horizontal_header.png" width={246} height={82} alt='Logomarca Sulamita Dantas Advocacia'/>
           </div>
-          <div>
-            <ul>
+          <div className='flex-1'>
+            <ul className='flex gap-5 items-center justify-center h-full'>
               <li>Serviços</li>
               <li>Sobre mim</li>
               <li>Depoimentos</li>
               <li>Blog</li>
-              <li>Contatos</li>
+              <li>Contato</li>
             </ul>
           </div>
-          <div>
-            <button>Marcar Reunião</button>
+          <div className='w-[246px] flex items-center justify-end'>
+            <button className='bg-[var(--light-brown)] px-8 py-2 rounded-md'>Marcar Reunião</button>
           </div>
         </nav>
         <div>
@@ -43,8 +59,8 @@ export default function Home() {
           </div>
         </div>
       </header>
-      <div>
-        <span>Dra. Sulamita Dantas • Advogada • Especialista em saúde  • Dra. Sulamita Dantas • Advogada • Especialista em saúde • Dra. Sulamita Dantas • Advogada • Especialista em saúde</span>
+      <div ref={divRef} className='w-full flex overflow-hidden py-3 bg-[var(--light-brown)] text-[var(--white-brown)]'>
+        <span className='text-[26px] font-bold text-nowrap'>Dra. Sulamita Dantas • Advogada • Especialista em saúde  • Dra. Sulamita Dantas • Advogada • Especialista em saúde  • Dra. Sulamita Dantas • Advogada • Especialista em saúde • Dra. Sulamita Dantas • Advogada • Especialista em saúde</span>
       </div>
       <div>
         <h2>Minhas Especialidades</h2>
