@@ -10,7 +10,8 @@ import { Poppins } from 'next/font/google'
 
 const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-  subsets: ["latin"]
+  subsets: ["latin"],
+  style: ["normal", "italic"]
 })
 
 export default function Home() {
@@ -68,8 +69,8 @@ export default function Home() {
       <div ref={divRef} className='w-full flex overflow-hidden py-4 bg-[var(--light-brown)] text-[var(--white-brown)]'>
         <span className='text-[26px] font-semibold text-nowrap'>Dra. Sulamita Dantas • Advogada • Especialista em saúde  • Dra. Sulamita Dantas • Advogada • Especialista em saúde  • Dra. Sulamita Dantas • Advogada • Especialista em saúde • Dra. Sulamita Dantas • Advogada • Especialista em saúde</span>
       </div>
-      <div className='flex flex-col justify-center items-center mt-20'>
-        <h2 className='font-semibold text-[30px] mb-8'>Minhas Especialidades</h2>
+      <div className='flex flex-col justify-center items-center mt-20 mb-16'>
+        <h2 className='font-semibold text-[30px] mb-8 text-[var(--dark-brown)]'>Minhas Especialidades</h2>
 
         <div className='grid grid-cols-4 gap-4'>
           <BoxInfo key={0} icon='document' title='Consultoria Jurídica' text='Oferecemos consultoria especializada em planos de saúde, ajudando a resolver questões relacionadas a cobertura e reembolsos.'/>
@@ -80,19 +81,19 @@ export default function Home() {
 
         <button className='mt-8 bg-[var(--light-brown)] font-medium px-8 py-2 rounded-md text-[var(--white-brown)]'>Marcar Reunião</button>
       </div>
-      <div>
-        <div>
+      <div className='bg-[var(--light-brown)] flex flex-row px-10 py-14'>
+        <div className='flex-[1]'>
           {/* IMAGEM DE SULAMITA 2 AQUI */}
         </div>
-        <div>
-          <h2>Um Pouco Sobre Mim</h2>
-          <p>
+        <div className='flex flex-col flex-[1]'>
+          <h2 className='font-semibold text-[var(--white-brown)] text-[30px] text-center mb-5'>Um Pouco Sobre Mim</h2>
+          <p className='font-[200] text-[var(--white-brown)] text-justify'>
             Me chamo Sulamita, sou advogada especialista em Direito à saúde.
             Ingressei no curso de direito com 16 anos de idade e no penúltimo período passei na OAB.
             Desde de sempre, soube que minha vocação era ser advogada. Meus olhos brilham por essa profissão!
             Algum tempo depois de me formar, tive, da pior forma possível...
           </p>
-          <button>Continuar Lendo</button>
+          <button className='mt-8 bg-[var(--white-brown)] font-medium px-8 py-2 rounded-md text-[var(--light-brown)] self-center'>Continuar Lendo</button>
         </div>
       </div>
       <div>
