@@ -1,3 +1,12 @@
+import Image from "next/image";
+import { Poppins } from 'next/font/google'
+
+const poppins = Poppins({
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  subsets: ["latin"],
+  style: ["normal", "italic"]
+})
+
 interface BlogCardProps {
     title: string;
     text: string;
@@ -7,16 +16,22 @@ interface BlogCardProps {
 
 export function BlogCard({title, text, link, imageUrl}: BlogCardProps) {
     return (
-        <div>
-            <div>
-                {/* IMAGEM DA CAPA AQUI */}
+        <div className={`bg-[#B1957410] border-[var(--light-brown)] border-[2px] rounded-xl w-96 h-[518px] flex flex-col ${poppins.className}`}>
+            <div className="relative w-full h-48 rounded-xl">
+                <Image 
+                    src={imageUrl} 
+                    alt={`Imagem do artigo de título: ${title}`} 
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-t-[10px]"
+                />
             </div>
-            <div>
-                <h3>{title}</h3>
-                <p>{text}</p>
+            <div className="flex flex-col flex-[1] gap-6 px-6">
+                <h3 className="font-bold mt-4 text-[18px] text-center text-[var(--gray-brown)]">{title}</h3>
+                <p className="font-light text-[var(--gray-brown)] text-justify">{text}</p>
             </div>
-            <div>
-                <a href={link}>Continuar lendo</a>
+            <div className="flex self-end mr-4 mb-2">
+                <a className="text-[var(--gray-brown)] font-light italic underline" href={link}>Continuar lendo</a>
             </div>
         </div>
     )
