@@ -81,7 +81,7 @@ export default function Home() {
             </div>
             <button className='mt-8 bg-[var(--light-brown)] font-medium px-8 py-2 rounded-md text-[var(--white-brown)]'>Saiba Mais</button>
           </div>
-          <div className='flex-[1]'>
+          <div className='flex-[1] relative'>
             <Image src="/sulamita_header.png" fill className='object-scale-down object-right pr-24 pt-12' alt='Imagem de Sulamita'/>
           </div>
         </div>

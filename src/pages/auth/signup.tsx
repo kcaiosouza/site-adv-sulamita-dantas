@@ -4,7 +4,8 @@ import { IoMail } from "react-icons/io5";
 import { Poppins } from 'next/font/google'
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '@/services/firebase';
+import { auth, firestore } from '@/services/firebase';
+import { setDoc, doc } from 'firebase/firestore';
 
 const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -27,6 +28,14 @@ export default function SignUp() {
 			try{
 				await createUserWithEmailAndPassword(auth, data.email, data.password).then((res) => {
 					console.log(res.user)
+					if(res.user) {
+						setDoc(doc(firestore, "Users", res.user.uid), {
+							email: data.email,
+							name: data.name,
+							lastName: data.lastName,
+							type: 'user'
+						})
+					}
 				});
 			}catch(err){
 				console.log("OCORREU UM ERR:", err)
