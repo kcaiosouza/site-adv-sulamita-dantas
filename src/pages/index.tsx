@@ -1,12 +1,13 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { BlogCard } from '@/components/BlogCard';
 import { BoxInfo } from '@/components/BoxInfo';
 import { FaShield } from "react-icons/fa6";
 import { BiSolidLeftArrow, BiSolidRightArrow } from "react-icons/bi";
 import { AiOutlineWhatsApp } from "react-icons/ai";
 import { Poppins } from 'next/font/google'
+import AccordionComponent from '@/components/Accordion';
 
 const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -54,8 +55,8 @@ export default function Home() {
     <main className={poppins.className}>
       <header className='flex flex-col w-full min-h-[100dvh] bg-[var(--header-white)] bg-[url("/lines_background.svg")] bg-cover'>
         <nav className='flex flex-row w-full px-12'>
-          <div className=''>
-            <Image src="/logo_horizontal_header.png" width={246} height={82} alt='Logomarca Sulamita Dantas Advocacia'/>
+          <div className='p-3'>
+            <Image loading='lazy' src="/logo_horizontal_header.png" width={224} height={75} alt='Logomarca Sulamita Dantas Advocacia'/>
           </div>
           <div className='flex-1'>
             <ul className='flex gap-5 items-center justify-center h-full'>
@@ -81,7 +82,7 @@ export default function Home() {
             <button className='mt-8 bg-[var(--light-brown)] font-medium px-8 py-2 rounded-md text-[var(--white-brown)]'>Saiba Mais</button>
           </div>
           <div className='flex-[1]'>
-            {/* FOTO DE SULAMITA AQUI */}
+            <Image src="/sulamita_header.png" fill className='object-scale-down object-right pr-24 pt-12' alt='Imagem de Sulamita'/>
           </div>
         </div>
       </header>
@@ -100,11 +101,11 @@ export default function Home() {
 
         <button className='mt-8 bg-[var(--light-brown)] font-medium px-8 py-2 rounded-md text-[var(--white-brown)]'>Marcar Reunião</button>
       </div>
-      <div className='bg-[var(--light-brown)] flex flex-row px-10 py-14'>
-        <div className='flex-[1]'>
-          {/* IMAGEM DE SULAMITA 2 AQUI */}
+      <div className='bg-[var(--light-brown)] flex flex-row px-10'>
+        <div className='flex-[1] relative'>
+          <Image src="/sulamita_about_me.png" fill className='object-contain' alt='Imagem de Sulamita'/>
         </div>
-        <div className='flex flex-col flex-[1]'>
+        <div className='flex flex-col flex-[1] py-14'>
           <h2 className='font-semibold text-[var(--white-brown)] text-[30px] text-center mb-5'>Um Pouco Sobre Mim</h2>
           <p className='font-[200] text-[var(--white-brown)] text-justify'>
             Me chamo Sulamita, sou advogada especialista em Direito à saúde.
@@ -148,15 +149,15 @@ export default function Home() {
       </div>
       <div className='flex flex-col items-center justify-center mt-32'>
         <h2 className='font-semibold text-[30px] mb-8 text-[var(--gray-brown)]'>Perguntas Frequentes</h2>
-        <div>
-          {/* ACORDEON AQUI */}
+        <div className='w-full px-24'>
+          <AccordionComponent/>
         </div>
       </div>
-      <div className='bg-[var(--light-brown)] flex flex-row px-10 py-14'>
-        <div className='flex-[1]'>
-          {/* IMAGEM DE SULAMITA 3 AQUI */}
+      <div className='bg-[var(--light-brown)] flex flex-row px-10'>
+        <div className='flex-[1] relative'>
+          <Image src="/sulamita_newsletter.png" alt='Imagem de Sulamita' fill className='object-contain'/>
         </div>
-        <div className='flex flex-col flex-[1]'>
+        <div className='flex flex-col flex-[1] py-14'>
           <h2 className='font-semibold text-[var(--white-brown)] text-[30px] text-center mb-1'>Minha Newsletter</h2>
           <span className='font-[200] text-[var(--white-brown)] text-center mb-8'>Receba um email toda vez que eu publicar um artigo</span>
           <form className="flex items-center rounded-lg p-2">

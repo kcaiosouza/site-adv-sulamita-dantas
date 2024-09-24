@@ -21,9 +21,8 @@ export function BlogCard({title, text, link, imageUrl}: BlogCardProps) {
                 <Image 
                     src={imageUrl} 
                     alt={`Imagem do artigo de título: ${title}`} 
-                    layout="fill"
-                    objectFit="cover"
-                    className="rounded-t-[10px]"
+                    fill
+                    className="rounded-t-[10px] object-cover"
                 />
             </div>
             <div className="flex flex-col flex-[1] gap-6 px-6">
