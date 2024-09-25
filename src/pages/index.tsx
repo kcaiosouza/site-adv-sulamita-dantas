@@ -8,6 +8,7 @@ import { BiSolidLeftArrow, BiSolidRightArrow } from "react-icons/bi";
 import { AiOutlineWhatsApp } from "react-icons/ai";
 import { Poppins } from 'next/font/google'
 import AccordionComponent from '@/components/Accordion';
+import CountUp from 'react-countup';
 
 const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -77,7 +78,7 @@ export default function Home() {
               <h1 className='font-bold text-[40px] text-[var(--gray-brown)]'>
                 Advocacia que faz a diferença:<br/> Defendendo seus direitos com paixão e expertise.
               </h1>
-              <span className='flex items-center gap-1 text-[var(--gray-brown)]'><FaShield className='mr-1' size={16} color='var(--light-brown)'/> +99 <b className='text-[var(--light-brown)]'>Casos</b></span>
+              <span className='flex items-center gap-1 text-[var(--gray-brown)]'><FaShield className='mr-1' size={16} color='var(--light-brown)'/> <div>+<CountUp start={0} duration={4} end={99} /></div> <b className='text-[var(--light-brown)]'>Casos</b></span>
             </div>
             <button className='mt-8 bg-[var(--light-brown)] font-medium px-8 py-2 rounded-md text-[var(--white-brown)]'>Saiba Mais</button>
           </div>
