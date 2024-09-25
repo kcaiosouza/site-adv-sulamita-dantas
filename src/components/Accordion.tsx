@@ -21,7 +21,7 @@ const AccordionItem = ({ header, ...rest }: any) => (
     buttonProps={{
       className: ({ isEnter }) =>
         `flex w-full p-4 text-left rounded-xl font-semibold text-[18px] transition-color duration-200 ease-out text-[var(--gray-brown)] hover:bg-[var(--light-brown)] ${
-          isEnter && "bg-[var(--dark-brown)] text-[var(--white-brown)]"
+          isEnter && "bg-[var(--light-brown)] text-[var(--white-brown)]"
         }`
     }}
     contentProps={{

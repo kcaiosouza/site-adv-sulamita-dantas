@@ -6,6 +6,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, firestore } from '@/services/firebase';
 import { setDoc, doc } from 'firebase/firestore';
+import { useRouter } from 'next/navigation'
 
 const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -22,7 +23,9 @@ interface signUpForm {
 }
 
 export default function SignUp() {
-	const { register, handleSubmit } = useForm<signUpForm>()
+	const router = useRouter();
+	const { register, handleSubmit } = useForm<signUpForm>();
+
 	const onSubmit: SubmitHandler<signUpForm> = async (data) => {
 		if(data.password == data.confirmPassword) {
 			try{
@@ -34,6 +37,8 @@ export default function SignUp() {
 							name: data.name,
 							lastName: data.lastName,
 							type: 'user'
+						}).then(() => {
+							router.push("/auth/login");
 						})
 					}
 				});
