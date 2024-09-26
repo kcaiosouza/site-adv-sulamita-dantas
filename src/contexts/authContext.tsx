@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
 import { parseCookies } from "nookies";
 import { doc, getDoc } from "firebase/firestore";
-import { firestore } from "@/services/firebase";
+import { firestore, auth } from "@/services/firebase";
 
 interface AuthProviderProps {
 	children: ReactNode;
@@ -28,7 +28,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
 					setUser(infoUser.data() as User)
 					console.log(infoUser.data())
 				}
-			})
+			});
+		}else {
+			auth.signOut();
+			setUser(null);
 		}
 	}, [])
 	
