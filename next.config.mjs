@@ -2,7 +2,14 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['www.conjur.com.br'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'www.conjur.com.br',
+        port: '',
+        pathname: '/**',
+      }
+    ],
   },
 };
 
