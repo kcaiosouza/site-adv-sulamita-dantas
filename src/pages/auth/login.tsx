@@ -1,12 +1,15 @@
-import Image from 'next/image'
-import { FaUser, FaKey } from "react-icons/fa6";
+import Image from 'next/image';
+import { FaKey } from "react-icons/fa6";
 import { IoMail } from "react-icons/io5";
-import { Poppins } from 'next/font/google'
+import { Poppins } from 'next/font/google';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth, firestore } from '@/services/firebase';
 import { setDoc, doc } from 'firebase/firestore';
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation';
+import { parseCookies, setCookie, destroyCookie } from 'nookies';
+import { AuthContext } from '@/contexts/authContext';
+import { useContext } from 'react';
 
 const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -20,12 +23,40 @@ interface loginForm {
 	remember: boolean
 }
 
+interface User {
+  email: string;
+  lastName: string;
+  name: string;
+  type: string;
+}
+
+interface AuthContextType {
+  user: User | null;
+}
+
 export default function Login() {
+	const { user } = useContext(AuthContext) as AuthContextType;
 	const router = useRouter();
 	const { register, handleSubmit } = useForm<loginForm>();
 
 	const onSubmit: SubmitHandler<loginForm> = async (data) => {
-		console.log(data);
+		try {
+			await signInWithEmailAndPassword(auth, data.email, data.password).then((res) => {
+				if(data.remember) {
+					setCookie(null, 'sulaadv.AuthToken', res.user.uid, {
+						maxAge: 30 * 24 * 60 * 60, // 30 Dias
+						path: '/',
+					});
+				}else {
+					setCookie(null, 'sulaadv.AuthToken', res.user.uid, {
+						maxAge: 24 * 60 * 60, // 1 Dia
+						path: '/',
+					});
+				}
+			});
+		}catch(err) {
+			console.log("ERRO AQUI:", err)
+		}
 	}
 
 	return(
@@ -83,6 +114,7 @@ export default function Login() {
 					</form>
 				</div>
 			</div>
+			<button onClick={() => {console.log(user)}}>CLICA EAQKLSDAHFKJASD</button>
 		</main>
 	)
 }
