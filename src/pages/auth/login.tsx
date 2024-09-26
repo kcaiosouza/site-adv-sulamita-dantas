@@ -4,12 +4,10 @@ import { IoMail } from "react-icons/io5";
 import { Poppins } from 'next/font/google';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth, firestore } from '@/services/firebase';
-import { setDoc, doc } from 'firebase/firestore';
+import { auth } from '@/services/firebase';
 import { useRouter } from 'next/navigation';
-import { parseCookies, setCookie, destroyCookie } from 'nookies';
-import { AuthContext } from '@/contexts/authContext';
-import { useContext } from 'react';
+import { parseCookies, setCookie } from 'nookies';
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 
 const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -35,7 +33,6 @@ interface AuthContextType {
 }
 
 export default function Login() {
-	const { user } = useContext(AuthContext) as AuthContextType;
 	const router = useRouter();
 	const { register, handleSubmit } = useForm<loginForm>();
 
@@ -79,6 +76,7 @@ export default function Login() {
 							 type="email"
 							 name="email"
 							 id="email"
+							 autoComplete='email'
 							 placeholder="exemplo@email.com"
 							 className="block w-full rounded-md border-0 py-1.5 pl-8 pr-20
 							  text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400
@@ -106,7 +104,7 @@ export default function Login() {
 							/>
 						</div>
 						<div className='flex gap-2 items-center justify-end mt-2'>
-							<input {...register("remember")} type="checkbox" name="remember" id="remamber" />
+							<input {...register("remember")} type="checkbox" name="remember" id="remember" />
 							<label htmlFor="remember" className='text-[var(--white-brown)]'>Lembrar</label>
 						</div>
 
@@ -114,7 +112,23 @@ export default function Login() {
 					</form>
 				</div>
 			</div>
-			<button onClick={() => {console.log(user)}}>CLICA EAQKLSDAHFKJASD</button>
 		</main>
 	)
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const {'sulaadv.AuthToken': token} = parseCookies(ctx);
+	
+	if(token) {
+		return {
+      redirect: {
+        destination: "/dashboard",
+        permanent: false,
+      },
+    };
+	}
+	
+	return {
+		props: {}
+	}
+};
