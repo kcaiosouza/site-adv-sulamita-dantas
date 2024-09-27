@@ -14,7 +14,7 @@ interface User {
 	type: string;
 }
 
-export const AuthContext = createContext({});
+export const AuthContext = createContext<User | {}>({});
 
 export function AuthProvider({ children }: AuthProviderProps) {
 	const [user, setUser] = useState<User | null>(null);
