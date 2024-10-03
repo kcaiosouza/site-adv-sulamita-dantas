@@ -1,13 +1,19 @@
-import { useContext, useEffect } from "react";
+import dynamic from 'next/dynamic';
+import Image from "next/image";
+import { useContext, useEffect, useState } from "react";
 import { auth, firestore } from "@/services/firebase";
 import { doc, getDoc, collection, getDocs } from "firebase/firestore";
 import { GetServerSideProps, GetServerSidePropsContext } from "next"
-import Image from "next/image";
 import { parseCookies, destroyCookie } from 'nookies';
 import { PiPenNib } from "react-icons/pi";
 import { TbLogout } from "react-icons/tb";
 import { AuthContext } from "@/contexts/authContext";
 import { useRouter } from 'next/navigation';
+import { toolbarOptions, renameHeading } from '@/utils/quillUtils';
+import 'react-quill/dist/quill.snow.css';
+
+
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
 interface User {
 	email: string;
@@ -20,16 +26,17 @@ interface AuthContextType {
   user: User | null;
 }
 
-export default function Dashboard({AllUsersInfo}:any) {
-	const router = useRouter()
-	const { user } = useContext(AuthContext) as AuthContextType;
+export default function NewPost({AllUsersInfo}:any) {
+    const router = useRouter()
+    const { user } = useContext(AuthContext) as AuthContextType;
+		const [content, setContent] = useState('');
 
-	const handleLogOut = async () => {
+    const handleLogOut = async () => {
 		destroyCookie(null, "sulaadv.AuthToken")
 		await auth.signOut();
 	}
 
-	useEffect(() => {
+    useEffect(() => {
 		const allUsers = JSON.parse(AllUsersInfo)
 		let allUsersFormated: User[] = []
 		allUsers.map((resUser: any) => {
@@ -37,10 +44,12 @@ export default function Dashboard({AllUsersInfo}:any) {
 			allUsersFormated.push(JSON.parse(`{"${resUser._document.key.path.segments[6]}":{"email":"${resUser._document.data.value.mapValue.fields.email.stringValue}","lastName":"${resUser._document.data.value.mapValue.fields.lastName.stringValue}","name":"${resUser._document.data.value.mapValue.fields.name.stringValue}","type":"${resUser._document.data.value.mapValue.fields.type.stringValue}"}}`))
 		})
 		console.log(allUsersFormated)
+
+		renameHeading()
 	}, [])
 
-	return (
-		<div className="flex flex-row min-h-[100dvh] bg-[var(--white-brown)]">
+    return(
+        <div className="flex flex-row min-h-[100dvh] bg-[var(--white-brown)]">
 			<aside className="bg-[var(--dark-brown)] w-[245px] min-h-full flex flex-col justify-between">
 				<div className="flex w-full relative items-center justify-center mt-3">
 					<Image src="/logo_horizontal_footer.png" width={172} height={60} alt="Logo de Sulamita"/>
@@ -66,15 +75,29 @@ export default function Dashboard({AllUsersInfo}:any) {
 			</aside>
 			<main className="flex-[1] h-full">
 				<header className="flex flex-row items-center justify-between border-b px-8 py-2">
-					<h2 className="font-semibold text-[24px] text-[var(--gray-brown)]">Dashboard</h2>
-					<div onClick={() => {router.push("./dashboard/posts/new")}} className="flex gap-2 items-center border-2 border-[var(--dark-brown)] rounded-full px-3 py-1 text-[var(--gray-brown)] font-medium hover:cursor-pointer hover:bg-[var(--light-brown)] transition-colors ease-in-out">
-						<PiPenNib size={18} />
-						<span>Nova Postagem</span>
-					</div>
+					<h2 className="font-semibold text-[24px] text-[var(--gray-brown)]">Nova Postagem</h2>
 				</header>
+
+				<section className="p-8">
+          {/* Editor React Quill */}
+          <ReactQuill
+            theme="snow" // Tema do editor
+            value={content}
+            onChange={setContent} // Atualiza o estado com o conteúdo do editor
+            modules={{toolbar: toolbarOptions}}
+          />
+
+          {/* Botão para exibir o conteúdo ou enviá-lo para o back-end */}
+          <button
+            className="mt-12 p-2 bg-blue-500 text-white rounded"
+            onClick={() => console.log(content)} // Aqui você pode enviar o conteúdo para o back-end
+          >
+            Publicar Postagem
+          </button>
+        </section>
 			</main>
 		</div>
-	)
+    );
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSidePropsContext) => {

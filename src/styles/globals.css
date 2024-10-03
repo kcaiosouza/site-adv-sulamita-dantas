@@ -9,3 +9,36 @@
   --white-brown: #FFFAF4;
   --header-white: #E5E6ED;
 }
+
+/* Start Quill CSS */
+
+.quill {
+  position: relative;
+  border-radius: 4px;
+  box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.4);
+}
+
+.ql-toolbar {
+  border: 0 !important;
+  border-bottom: 2px solid var(--light-brown);
+  background: transparent;
+}
+
+.ql-container {
+  border: 0 !important;
+  min-height: calc(100dvh - 250px) !important;
+}
+
+.ql-toolbar .ql-formats {
+  margin-right: 8px;
+}
+
+.ql-toolbar .ql-picker {
+  margin: 0;
+}
+
+.ql-editor {
+  min-height: calc(100dvh - 250px) !important;
+}
+
+/* End Quill CSS */
