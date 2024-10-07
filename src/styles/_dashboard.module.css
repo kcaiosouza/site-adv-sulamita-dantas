@@ -7,3 +7,18 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 24px;
 }
+
+.listChartContainerGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 21px;
+}
+
+.largeGrid {
+    grid-column: span 2;
+}
+
+.smallGrid {
+    grid-column: span 1;
+}

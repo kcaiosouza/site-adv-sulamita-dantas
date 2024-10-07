@@ -50,7 +50,7 @@ export default function SideBar({currentPage}: SideBarProps) {
 						<span className='font-bold text-[14px] text-[var(--gray-brown)]'>Páginas</span>
 					</div>
 					<div className='flex flex-col w-full px-4 gap-1'>
-						<Link href="/dashboard" prefetch className={`hover:bg-[var(--sidebar-hover-brown)] bg-transparent transition-colors duration-300 rounded-md py-2 px-4 flex items-center gap-2 ${currentPage == "dashboard" ? "bg-[var(--sidebar-hover-brown)]" : ""}`}>
+						<Link href="/dashboard" className={`hover:bg-[var(--sidebar-hover-brown)] bg-transparent transition-colors duration-300 rounded-md py-2 px-4 flex items-center gap-2 ${currentPage == "dashboard" ? "bg-[var(--sidebar-hover-brown)]" : ""}`}>
 							<FaHouse size={24} color='var(--white-brown)'/>
 							<span className='font-bold text-[16px] text-[var(--white-brown)]'>Dashboard</span>
 						</Link>
