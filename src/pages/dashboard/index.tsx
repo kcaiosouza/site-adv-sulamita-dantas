@@ -118,7 +118,7 @@ export default function Dashboard({AllUsersInfo, data01, data02}:any) {
 						</div>
 						<div className="px-5">
 							{[0,1,2,3,4].map(item => 
-								<div>
+								<div key={item}>
 									<div className="flex justify-between">
 										<div className="flex items-center">
 											<Image src="/sulamita_newsletter.png" width={56} height={56} alt='Foto de Perfil' className={`rounded-md object-cover border-2 border-[var(--white-brown)]`}/>
@@ -136,7 +136,7 @@ export default function Dashboard({AllUsersInfo, data01, data02}:any) {
 											<FaCommentDots />
 											<CountUp end={8} duration={1}/>
 										</div>
-										
+
 										<div className="flex items-center justify-center">
 											<FaPenAlt />
 										</div>
