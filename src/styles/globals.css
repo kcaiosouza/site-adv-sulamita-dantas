@@ -17,7 +17,8 @@
 .quill {
   position: relative;
   border-radius: 4px;
-  box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.4);
+  /* box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.4); */
+  border: 2px solid rgba(200, 207, 231, 0.493)
 }
 
 .ql-toolbar {
@@ -28,7 +29,7 @@
 
 .ql-container {
   border: 0 !important;
-  min-height: calc(100dvh - 250px) !important;
+  min-height: calc(100dvh - 280px) !important;
 }
 
 .ql-toolbar .ql-formats {
@@ -40,7 +41,7 @@
 }
 
 .ql-editor {
-  min-height: calc(100dvh - 250px) !important;
+  min-height: calc(100dvh - 280px) !important;
 }
 
 /* End Quill CSS */

@@ -1,0 +1,9 @@
+.main {
+    padding-left: calc(1.75rem + 288px);
+}
+
+.cardsContainerGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}

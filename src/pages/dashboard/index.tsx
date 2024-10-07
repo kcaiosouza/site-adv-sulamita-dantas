@@ -10,6 +10,10 @@ import { AuthContext } from "@/contexts/authContext";
 import { useRouter } from 'next/navigation';
 import SideBar from "@/components/SideBar";
 import DashboardHeader from "@/components/DashboardHeader";
+import styles from '@/styles/_dashboard.module.css';
+import { TbArticleFilled } from "react-icons/tb";
+import CountUp from "react-countup";
+
 
 interface User {
 	email: string;
@@ -38,9 +42,22 @@ export default function Dashboard({AllUsersInfo}:any) {
 
 	return (
 		<div className="flex flex-row min-h-[100dvh] bg-[var(--white-brown)] p-7">
-			<SideBar />
-			<main className="flex-[1] h-full pl-7">
+			<SideBar currentPage="dashboard"/>
+			<main className={`flex-[1] h-full ${styles.main}`}>
 				<DashboardHeader title="Dashboard"/>
+				<div className={styles.cardsContainerGrid}>
+					<div className="h-32 w-full px-4 py-2 border-2 rounded-md">
+						<div className="flex items-center">
+							<TbArticleFilled  size={32}/>
+							<span className="font-bold text-[20px]">Postagens</span>
+						</div>
+						<div>
+							<CountUp end={320} duration={1} className="font-bold text-[32px]"/>
+						</div>
+					</div>
+					<div className="h-32 w-full border-2 rounded-md"></div>
+					<div className="h-32 w-full border-2 rounded-md"></div>
+				</div>
 			</main>
 		</div>
 	)
