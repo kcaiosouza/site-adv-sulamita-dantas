@@ -58,6 +58,7 @@ export default function NewPost({AllUsersInfo}:any) {
           >
             Publicar Postagem
           </button>
+					<small>Caio é lindo e vc sabe disso</small>
 			</main>
 		</div>
     );
