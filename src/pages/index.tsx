@@ -188,7 +188,7 @@ export default function Home() {
               <li>TikTok</li>
               <li>Facebook</li>
               <li>Youtube</li>
-              <li className='opacity-35 select-none'>Twitter (X)</li>
+              <li>Twitter (X)</li>
             </ul>
           </div>
           <div>

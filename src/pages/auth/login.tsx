@@ -50,6 +50,8 @@ export default function Login() {
 						path: '/',
 					});
 				}
+
+				router.push("/dashboard");
 			});
 		}catch(err) {
 			console.log("ERRO AQUI:", err)
