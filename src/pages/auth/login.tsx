@@ -1,13 +1,19 @@
+import { useState } from 'react';
 import Image from 'next/image';
-import { FaKey } from "react-icons/fa6";
-import { IoMail } from "react-icons/io5";
-import { Poppins } from 'next/font/google';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import Link from 'next/link';
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { auth } from '@/services/firebase';
+import { Poppins } from 'next/font/google';
 import { useRouter } from 'next/navigation';
 import { parseCookies, setCookie } from 'nookies';
-import { GetServerSideProps, GetServerSidePropsContext } from 'next';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { MutatingDots } from 'react-loader-spinner'
+import { RiEyeLine, RiEyeCloseLine } from "react-icons/ri";
 
 const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -34,9 +40,13 @@ interface AuthContextType {
 
 export default function Login() {
 	const router = useRouter();
+	const [seePassword, setSeePassword] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
+	const [errLogin, setErrLogin] = useState<String | Boolean>(false);
 	const { register, handleSubmit } = useForm<loginForm>();
 
 	const onSubmit: SubmitHandler<loginForm> = async (data) => {
+		setIsLoading(true);
 		try {
 			await signInWithEmailAndPassword(auth, data.email, data.password).then((res) => {
 				if(data.remember) {
@@ -54,66 +64,95 @@ export default function Login() {
 				router.push("/dashboard");
 			});
 		}catch(err) {
-			console.log("ERRO AQUI:", err)
+			setIsLoading(false);
+			setErrLogin(`${err == "FirebaseError: Firebase: Error (auth/invalid-credential)." ? "Credenciais incorretas" : "Erro não identificado."}`)
 		}
+	}
+
+	const toggleSeePassword = () => {
+		setSeePassword(!seePassword)
 	}
 
 	return(
 		<main className={poppins.className}>
-			<div className='w-full min-h-[100dvh] flex flex-col items-center justify-center bg-[url("/lines_background.svg")] bg-cover'>
-				<div className='mb-10'>
-					<Image priority src="/logo_horizontal_header.png" alt='Logo Sulamita Dantas' width={224} height={75} className='w-auto h-auto'/>
-				</div>
-				<div className='min-w-[260px] bg-[var(--gray-brown)] rounded-xl p-7'>
-					<form className='bg-[var(--gray-brown)] flex flex-col' onSubmit={handleSubmit(onSubmit)}>
-						<label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">Email:</label>
-						<div className="relative mt-2 rounded-md shadow-sm">
-							<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-								<span className="text-gray-500 sm:text-sm">
-									<IoMail />
-								</span>
-							</div>
-							<input
-							 {...register('email')}
-							 type="email"
-							 name="email"
-							 id="email"
-							 autoComplete='email'
-							 placeholder="exemplo@email.com"
-							 className="block w-full rounded-md border-0 py-1.5 pl-8 pr-20
-							  text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400
-								focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[var(--light-brown)]
-								sm:text-sm sm:leading-6"
-							/>
+			<div className="w-full lg:grid lg:grid-cols-2 h-[100dvh]">
+      <div className="flex items-center justify-center py-12">
+        <div className="mx-auto grid w-[350px] gap-6">
+          <div className="grid gap-2 text-center">
+            <h1 className="text-3xl font-bold">Entrar</h1>
+            <p className="text-balance text-muted-foreground">
+              Informe suas credenciais para realizar o login
+            </p>
+          </div>
+          <form className="grid gap-4" onSubmit={handleSubmit(onSubmit)}>
+            <div className="grid gap-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+								{...register("email")}
+                id="email"
+                type="email"
+                placeholder="exemplo@email.com"
+                required
+              />
+            </div>
+            <div className="grid gap-2 relative">
+              <div className="flex items-center">
+                <Label htmlFor="password">Password</Label>
+                <Link
+                  href="#"
+                  className="ml-auto inline-block text-sm underline"
+                >
+                  Esqueceu a senha?
+                </Link>
+              </div>
+              <Input {...register("password")} id="password" placeholder='••••••••' type={seePassword ? "text" : "password"} required />
+							{seePassword ? <RiEyeLine onClick={toggleSeePassword} className='absolute top-[38px] right-3 cursor-pointer'/> : <RiEyeCloseLine onClick={toggleSeePassword} className='absolute top-[38px] right-3 cursor-pointer'/>}
+            </div>
+						<div className='flex items-center gap-2'>
+							<Checkbox {...register("remember")} id='remember'/>
+							<Label htmlFor='remember'>Lembrar por 30 dias</Label>
 						</div>
-						<label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">Senha:</label>
-						<div className="relative mt-2 rounded-md shadow-sm">
-							<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-								<span className="text-gray-500 sm:text-sm">
-									<FaKey />
-								</span>
-							</div>
-							<input
-							 {...register('password')}
-							 type="password"
-							 name="password"
-							 id="password"
-							 placeholder="••••••••"
-							 className="block w-full rounded-md border-0 py-1.5 pl-8 pr-20
-							  text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400
-								focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[var(--light-brown)]
-								sm:text-sm sm:leading-6"
-							/>
+						<span className='font-light text-sm text-red-400'>{errLogin != false ? `${errLogin}` : ""}</span>
+						{isLoading ? 
+						
+						<div className='flex items-center justify-center'>
+							<MutatingDots
+								visible={true}
+								height="100"
+								width="100"
+								color="var(--light-brown)"
+								secondaryColor="var(--gray-brown)"
+								radius="12.5"
+								ariaLabel="mutating-dots-loading"
+								wrapperStyle={{}}
+								wrapperClass=""
+							/> 
 						</div>
-						<div className='flex gap-2 items-center justify-end mt-2'>
-							<input {...register("remember")} type="checkbox" name="remember" id="remember" />
-							<label htmlFor="remember" className='text-[var(--white-brown)]'>Lembrar</label>
-						</div>
-
-						<button type="submit" className="text-white bg-[var(--light-brown)] hover:bg-[var(--dark-brown)] transition-colors ease-in-out focus:ring-4 focus:outline-none focus:ring-[var(--dark-brown)] font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center mt-10">Entrar</button>
-					</form>
-				</div>
-			</div>
+						: 
+            <Button type="submit" className="w-full">
+              Login
+            </Button>
+						
+						}
+          </form>
+          <div className="mt-4 text-center text-sm">
+            Não tem uma conta?{" "}
+            <Link href="./signup" className="underline">
+              Criar agora
+            </Link>
+          </div>
+        </div>
+      </div>
+      <div className="hidden bg-muted lg:block">
+        <Image
+          src="/undraw_login.svg"
+          alt="Image"
+          width="1920"
+          height="1080"
+          className="h-full w-full object-contain dark:brightness-[0.2] dark:grayscale"
+        />
+      </div>
+    </div>
 		</main>
 	)
 }
