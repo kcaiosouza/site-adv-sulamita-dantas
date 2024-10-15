@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
-import { auth } from '@/services/firebase';
+import { auth, firestore } from '@/services/firebase';
 import { Poppins } from 'next/font/google';
 import { useRouter } from 'next/navigation';
 import { parseCookies, setCookie } from 'nookies';
@@ -14,6 +14,8 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { MutatingDots } from 'react-loader-spinner'
 import { RiEyeLine, RiEyeCloseLine } from "react-icons/ri";
+import { doc, getDoc } from 'firebase/firestore';
+import { AuthContext } from '@/contexts/authContext';
 
 const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -36,6 +38,7 @@ interface User {
 
 interface AuthContextType {
   user: User | null;
+  setLogin: any;
 }
 
 export default function Login() {
@@ -44,6 +47,8 @@ export default function Login() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [errLogin, setErrLogin] = useState<String | Boolean>(false);
 	const { register, handleSubmit } = useForm<loginForm>();
+	const { setLogin } = useContext(AuthContext) as AuthContextType;
+
 
 	const onSubmit: SubmitHandler<loginForm> = async (data) => {
 		setIsLoading(true);
@@ -61,7 +66,14 @@ export default function Login() {
 					});
 				}
 
-				router.push("/dashboard");
+				const docRef = doc(firestore, "Users", res.user.uid);
+				getDoc(docRef).then((infoUser) => {
+					if(infoUser.exists()){
+						setLogin(infoUser.data() as User)
+						router.push("/dashboard");
+						console.log(infoUser.data())
+					}
+				});
 			});
 		}catch(err) {
 			setIsLoading(false);

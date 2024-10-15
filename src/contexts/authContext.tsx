@@ -26,7 +26,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 			getDoc(docRef).then((infoUser) => {
 				if(infoUser.exists()){
 					setUser(infoUser.data() as User)
-					console.log(infoUser.data())
+					// console.log(infoUser.data())
 				}
 			});
 		}else {
@@ -34,10 +34,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
 			setUser(null);
 		}
 	}, [])
+
+	function setLogin(value: User) {
+		setUser(value)
+	}
 	
 	return (
 		<AuthContext.Provider value={{
 			user,
+			setLogin
 		}}>
 			{children}
 		</AuthContext.Provider>
