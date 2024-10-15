@@ -62,7 +62,7 @@ export default function SideBar({currentPage}: SideBarProps) {
 							<FaComments size={24} color='var(--white-brown)'/>
 							<span className='font-bold text-[16px] text-[var(--white-brown)]'>Comentários</span>
 						</Link>
-						<Link href="#" className={`hover:bg-[var(--sidebar-hover-brown)] bg-transparent transition-colors duration-300 rounded-md py-2 px-4 flex items-center gap-2 ${currentPage == "users" ? "bg-[var(--sidebar-hover-brown)]" : ""}`}>
+						<Link href="/dashboard/users" className={`hover:bg-[var(--sidebar-hover-brown)] bg-transparent transition-colors duration-300 rounded-md py-2 px-4 flex items-center gap-2 ${currentPage == "users" ? "bg-[var(--sidebar-hover-brown)]" : ""}`}>
 							<HiUsers size={24} color='var(--white-brown)'/>
 							<span className='font-bold text-[16px] text-[var(--white-brown)]'>Usuários</span>
 						</Link>

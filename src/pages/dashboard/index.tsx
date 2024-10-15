@@ -54,17 +54,6 @@ const CustomLegend = ({ payload }:any) => {
 export default function Dashboard({AllUsersInfo, data01, data02}:any) {
 	const { user } = useContext(AuthContext) as AuthContextType;
 
-	// PAGINA DE USUARIOS
-	// useEffect(() => {
-	// 	const allUsers = JSON.parse(AllUsersInfo)
-	// 	let allUsersFormated: User[] = []
-	// 	allUsers.map((resUser: any) => {
-	// 		console.log(`{"${resUser._document.key.path.segments[6]}":{"email":"${resUser._document.data.value.mapValue.fields.email.stringValue}","lastName":"${resUser._document.data.value.mapValue.fields.lastName.stringValue}","name":"${resUser._document.data.value.mapValue.fields.name.stringValue}","type":"${resUser._document.data.value.mapValue.fields.type.stringValue}"}}`)
-	// 		allUsersFormated.push(JSON.parse(`{"${resUser._document.key.path.segments[6]}":{"email":"${resUser._document.data.value.mapValue.fields.email.stringValue}","lastName":"${resUser._document.data.value.mapValue.fields.lastName.stringValue}","name":"${resUser._document.data.value.mapValue.fields.name.stringValue}","type":"${resUser._document.data.value.mapValue.fields.type.stringValue}"}}`))
-	// 	})
-	// 	console.log(allUsersFormated)
-	// }, [])
-
 	return (
 		<div className="flex flex-row min-h-[100dvh] bg-[var(--white-brown)] p-7">
 			<SideBar currentPage="dashboard"/>
@@ -190,10 +179,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
 		}
 	}
 
-	// const collectionRef = collection(firestore, "Users");
-	// const collectionSnap = await getDocs(collectionRef)
-	// const AllUsersInfo = collectionSnap.docs
-
 	const data01 = [
 		{ name: 'Postagens Janeiro', value: 2 },
 		{ name: 'Postagens Fevereiro', value: 5 },
@@ -213,7 +198,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
 
 	return {
 		props: {
-			// AllUsersInfo: JSON.stringify(AllUsersInfo),
 			data01,
 			data02
 		}
