@@ -7,9 +7,34 @@ import { parseCookies } from "nookies";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import CountUp from "react-countup";
+import { collection, getDocs } from "firebase/firestore";
+import { firestore } from "@/services/firebase";
+import { useEffect, useState } from "react";
 
+interface Post {
+	text: string,
+	title: string,
+	author: string,
+	posted_at: Date
+}
 
-export default function Posts() {
+export default function Posts({AllPostsInfo}: any) {
+	const [allPosts, setAllPosts] = useState<any>([]);
+
+	useEffect(() => {
+		if(AllPostsInfo){
+			const allPosts = JSON.parse(AllPostsInfo)
+			let allPostsFormated: Post[] = []
+			allPosts.map((resUser: any) => {
+				// console.log(resUser._document.key.path.segments[6])
+				// console.log(`{"${resUser._document.key.path.segments[6]}":{"title":"${resUser._document.data.value.mapValue.fields.title.stringValue}","text":"${resUser._document.data.value.mapValue.fields.text.stringValue}","author":"${resUser._document.data.value.mapValue.fields.author.stringValue}","posted_at":"${resUser._document.data.value.mapValue.fields.posted_at.stringValue}"}}`)
+				allPostsFormated.push(JSON.parse(`{"${resUser._document.key.path.segments[6]}":{"title":"${resUser._document.data.value.mapValue.fields.title.stringValue}","author":"${resUser._document.data.value.mapValue.fields.author.stringValue}","posted_at":"${resUser._document.data.value.mapValue.fields.posted_at.stringValue}"}}`))
+			})
+			// console.log(allPostsFormated)
+			setAllPosts(allPostsFormated)
+		}
+	}, [])
+
   return(
     <div className="flex flex-row min-h-[100dvh] bg-[var(--white-brown)] p-7">
       <SideBar currentPage='posts'/>
@@ -28,31 +53,35 @@ export default function Posts() {
 						</TableRow>
 					</TableHeader>
 					<TableBody>
-						{[0,1,2,3,4,5,6,7,8,9,10,11,12].map((item: number) => 
-						<TableRow key={item} className="hover:bg-[var(--light-brown)]">
-							<TableCell className="font-medium">
-								<Image src="/sulamita_newsletter.png" width={56} height={56} alt='Foto de Perfil' className={`rounded-md object-cover border-2 border-[var(--white-brown)]`}/>
-							</TableCell>
-							<TableCell>Como Navegar nas Questões de Cobertura de Saúde: O Que Você Precisa Saber</TableCell>
-							<TableCell className="text-right">
-								<CountUp end={161} duration={1}/>
-							</TableCell>
-							<TableCell className="text-right">
-								<CountUp end={161} duration={1}/>
-							</TableCell>
-							<TableCell className="text-right">
-								<DropdownMenu>
-									<DropdownMenuTrigger className="border-2 px-3 py-1 rounded-md">Abrir</DropdownMenuTrigger>
-									<DropdownMenuContent>
-										<DropdownMenuLabel>Ações</DropdownMenuLabel>
-										<DropdownMenuSeparator />
-										<DropdownMenuItem>Editar</DropdownMenuItem>
-										<DropdownMenuItem>Deletar</DropdownMenuItem>
-									</DropdownMenuContent>
-								</DropdownMenu>
-							</TableCell>
-						</TableRow>
-						)}
+						{allPosts.map((post: any, index: number) => {
+							const key = Object.keys(post)[0];
+							const { title, author, posted_at } = post[key];
+							return(
+								<TableRow key={index} className="hover:bg-[var(--light-brown)]">
+									<TableCell className="font-medium">
+										<Image src="/sulamita_newsletter.png" width={56} height={56} alt='Foto de Perfil' className={`rounded-md object-cover border-2 border-[var(--white-brown)]`}/>
+									</TableCell>
+									<TableCell>{title}</TableCell>
+									<TableCell className="text-right">
+										<CountUp end={161} duration={1}/>
+									</TableCell>
+									<TableCell className="text-right">
+										<CountUp end={161} duration={1}/>
+									</TableCell>
+									<TableCell className="text-right">
+										<DropdownMenu>
+											<DropdownMenuTrigger className="border-2 px-3 py-1 rounded-md">Abrir</DropdownMenuTrigger>
+											<DropdownMenuContent>
+												<DropdownMenuLabel>Ações</DropdownMenuLabel>
+												<DropdownMenuSeparator />
+												<DropdownMenuItem>Editar</DropdownMenuItem>
+												<DropdownMenuItem>Deletar</DropdownMenuItem>
+											</DropdownMenuContent>
+										</DropdownMenu>
+									</TableCell>
+								</TableRow>
+							)
+						})}
 					</TableBody>
 				</Table>
         </div>
@@ -73,7 +102,13 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
 		}
 	}
 
+	const collectionRef = collection(firestore, "Posts");
+	const collectionSnap = await getDocs(collectionRef)
+	const AllPostsInfo = collectionSnap.docs
+
 	return {
-		props: {}
+		props: {
+			AllPostsInfo: JSON.stringify(AllPostsInfo),
+		}
 	}
 }
