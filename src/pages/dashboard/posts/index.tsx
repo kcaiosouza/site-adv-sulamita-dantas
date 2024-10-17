@@ -10,11 +10,13 @@ import CountUp from "react-countup";
 import { collection, getDocs } from "firebase/firestore";
 import { firestore } from "@/services/firebase";
 import { useEffect, useState } from "react";
+import { BiLinkExternal, BiPencil, BiTrash } from "react-icons/bi";
 
 interface Post {
 	text: string,
 	title: string,
 	author: string,
+	views: number,
 	posted_at: Date
 }
 
@@ -28,9 +30,10 @@ export default function Posts({AllPostsInfo}: any) {
 			allPosts.map((resUser: any) => {
 				// console.log(resUser._document.key.path.segments[6])
 				// console.log(`{"${resUser._document.key.path.segments[6]}":{"title":"${resUser._document.data.value.mapValue.fields.title.stringValue}","text":"${resUser._document.data.value.mapValue.fields.text.stringValue}","author":"${resUser._document.data.value.mapValue.fields.author.stringValue}","posted_at":"${resUser._document.data.value.mapValue.fields.posted_at.stringValue}"}}`)
-				allPostsFormated.push(JSON.parse(`{"${resUser._document.key.path.segments[6]}":{"title":"${resUser._document.data.value.mapValue.fields.title.stringValue}","author":"${resUser._document.data.value.mapValue.fields.author.stringValue}","posted_at":"${resUser._document.data.value.mapValue.fields.posted_at.stringValue}"}}`))
+				console.log(`{"${resUser._document.key.path.segments[6]}":{"title":"${resUser._document.data.value.mapValue.fields.title.stringValue}","author":"${resUser._document.data.value.mapValue.fields.author.stringValue}","views":"${resUser._document.data.value.mapValue.fields.views.stringValue}","posted_at":"${resUser._document.data.value.mapValue.fields.posted_at.stringValue}"}}`)
+				allPostsFormated.push(JSON.parse(`{"${resUser._document.key.path.segments[6]}":{"title":"${resUser._document.data.value.mapValue.fields.title.stringValue}","author":"${resUser._document.data.value.mapValue.fields.author.stringValue}","views":"${resUser._document.data.value.mapValue.fields.views.integerValue}","posted_at":"${resUser._document.data.value.mapValue.fields.posted_at.stringValue}"}}`))
 			})
-			// console.log(allPostsFormated)
+			console.log(allPosts)
 			setAllPosts(allPostsFormated)
 		}
 	}, [])
@@ -55,7 +58,7 @@ export default function Posts({AllPostsInfo}: any) {
 					<TableBody>
 						{allPosts.map((post: any, index: number) => {
 							const key = Object.keys(post)[0];
-							const { title, author, posted_at } = post[key];
+							const { title, author, views, posted_at } = post[key];
 							return(
 								<TableRow key={index} className="hover:bg-[var(--light-brown)]">
 									<TableCell className="font-medium">
@@ -66,7 +69,7 @@ export default function Posts({AllPostsInfo}: any) {
 										<CountUp end={161} duration={1}/>
 									</TableCell>
 									<TableCell className="text-right">
-										<CountUp end={161} duration={1}/>
+										<CountUp end={views} duration={1}/>
 									</TableCell>
 									<TableCell className="text-right">
 										<DropdownMenu>
@@ -74,8 +77,9 @@ export default function Posts({AllPostsInfo}: any) {
 											<DropdownMenuContent>
 												<DropdownMenuLabel>Ações</DropdownMenuLabel>
 												<DropdownMenuSeparator />
-												<DropdownMenuItem>Editar</DropdownMenuItem>
-												<DropdownMenuItem>Deletar</DropdownMenuItem>
+												<DropdownMenuItem className="cursor-pointer"><BiLinkExternal className="mr-1"/> Abrir</DropdownMenuItem>
+												<DropdownMenuItem className="cursor-pointer"><BiPencil className="mr-1"/> Editar</DropdownMenuItem>
+												<DropdownMenuItem className="cursor-pointer"><BiTrash className="mr-1"/> Deletar</DropdownMenuItem>
 											</DropdownMenuContent>
 										</DropdownMenu>
 									</TableCell>
