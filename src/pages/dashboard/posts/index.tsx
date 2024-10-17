@@ -11,6 +11,8 @@ import { collection, getDocs } from "firebase/firestore";
 import { firestore } from "@/services/firebase";
 import { useEffect, useState } from "react";
 import { BiLinkExternal, BiPencil, BiTrash } from "react-icons/bi";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 interface Post {
 	text: string,
@@ -44,8 +46,11 @@ export default function Posts({AllPostsInfo}: any) {
 			<main className={`flex-[1] h-full pl-7 ${styles.main}`}>
         <DashboardHeader title="Todas as postagens"/>
         <div className="">
+					<Link href="/dashboard/posts/new">
+						<Button className="mb-2">Nova Postagem</Button>
+					</Link>
 				<Table>
-					<TableCaption>Lista com suas todas as postagens.</TableCaption>
+					<TableCaption>Lista com todas as postagens.</TableCaption>
 					<TableHeader>
 						<TableRow className="hover:bg-transparent">
 							<TableHead className="w-[100px]"></TableHead>
@@ -78,7 +83,9 @@ export default function Posts({AllPostsInfo}: any) {
 												<DropdownMenuLabel>Ações</DropdownMenuLabel>
 												<DropdownMenuSeparator />
 												<DropdownMenuItem className="cursor-pointer"><BiLinkExternal className="mr-1"/> Abrir</DropdownMenuItem>
-												<DropdownMenuItem className="cursor-pointer"><BiPencil className="mr-1"/> Editar</DropdownMenuItem>
+												<Link href={`/dashboard/posts/edit/${key}`}>
+													<DropdownMenuItem className="cursor-pointer"><BiPencil className="mr-1"/> Editar</DropdownMenuItem>
+												</Link>
 												<DropdownMenuItem className="cursor-pointer"><BiTrash className="mr-1"/> Deletar</DropdownMenuItem>
 											</DropdownMenuContent>
 										</DropdownMenu>
