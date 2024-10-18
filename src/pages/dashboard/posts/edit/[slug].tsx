@@ -1,11 +1,10 @@
 import dynamic from 'next/dynamic';
 import { useContext, useMemo, useState } from "react";
 import { firestore, storage } from "@/services/firebase";
-import { doc, getDoc, collection, getDocs, setDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { GetServerSideProps, GetServerSidePropsContext } from "next"
 import { parseCookies } from 'nookies';
 import { toolbarOptions } from '@/utils/quillUtils';
-import 'react-quill/dist/quill.snow.css';
 import SideBar from '@/components/SideBar';
 import DashboardHeader from '@/components/DashboardHeader';
 import styles from '@/styles/_dashboard.module.css';
@@ -21,6 +20,7 @@ import { useForm } from 'react-hook-form'
 
 
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+import 'react-quill/dist/quill.snow.css';
 
 interface User {
 	email: string;
@@ -43,12 +43,14 @@ interface AuthContextType {
 
 interface InfoPostProps {
   PostInfo: Post;
+	slug: string;
 }
 
 export default function EditPost(serverData: InfoPostProps) {
 	const [content, setContent] = useState(serverData.PostInfo.text);
 	const { user } = useContext(AuthContext) as AuthContextType;
 	const { register, handleSubmit } = useForm();
+	const router = useRouter();
 
 	const handleImageUpload = async () => {
     const input = document.createElement("input");
@@ -84,6 +86,19 @@ export default function EditPost(serverData: InfoPostProps) {
 		}
   };
 
+	const updatePost = () => {
+		const docRef = doc(firestore, "Posts", serverData.slug);
+
+		updateDoc(docRef, { text: content })
+		.then(() => {
+			router.push("/dashboard/posts")
+		})
+		.catch((error) => {
+			alert("Ops... Ocorreu um erro 😞")
+			console.log("Erro na atualizacao do documento no firebase:", error)
+		});
+	}
+
 	const modules = useMemo(() => ({
 		toolbar: {
 			container: toolbarOptions,
@@ -118,7 +133,7 @@ export default function EditPost(serverData: InfoPostProps) {
 							</DialogDescription>
 						</DialogHeader>
             <DialogFooter>
-              <Button onClick={() => {alert("Post deletado com sucesso! Brincadeira... Esse é apenas um alert para teste")}}>Atualizar</Button>
+              <Button onClick={() => {updatePost()}}>Atualizar</Button>
             </DialogFooter>
 					</DialogContent>
 				</Dialog>
@@ -160,7 +175,12 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
 
 	return {
 		props: {
-      PostInfo,
+      PostInfo: {
+				text: PostInfo.text,
+				title: PostInfo.title,
+				author: PostInfo.author
+			},
+			slug,
     }
 	}
 }
