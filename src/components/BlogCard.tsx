@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Poppins } from 'next/font/google'
+import Link from "next/link";
 
 const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -30,7 +31,7 @@ export function BlogCard({title, text, link, imageUrl}: BlogCardProps) {
                 <p className="font-light text-[var(--gray-brown)] text-justify">{text}</p>
             </div>
             <div className="flex self-end mr-4 mb-2">
-                <a className="text-[var(--gray-brown)] font-light italic underline" href={link}>Continuar lendo</a>
+                <Link className="text-[var(--gray-brown)] font-light italic underline" href={link}>Continuar lendo</Link>
             </div>
         </div>
     )
